@@ -1,23 +1,17 @@
 import React from "react";
-import { makeStyles, Typography, Paper } from "@material-ui/core";
+import { makeStyles, Typography } from "@material-ui/core";
 import Carousel from "react-material-ui-carousel";
-import { graphql, useStaticQuery } from "gatsby";
-import Img from "gatsby-image";
 
 const TestimonialSlider = () => {
     const useStyles = makeStyles((theme) => ({
-        title: {
-
-        },
-        subtitle: {
-            marginTop: theme.spacing(2)
-        },
         container: {
-            width: "100%"
+            width: "100%",
+            textAlign: "center",
+            padding: theme.spacing(4, 2),
         },
         carouselContainer: {
             width: "100%",
-            height: 500,
+            height: 400,
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
@@ -25,73 +19,73 @@ const TestimonialSlider = () => {
         },
         image: {
             borderRadius: "50%",
-            border: "1px solid whitesmoke"
+            border: "2px solid #eee",
+            width: 100,
+            height: 100,
+            objectFit: "cover",
         },
         review: {
             fontWeight: 300,
             fontSize: 18,
             maxWidth: 800,
             lineHeight: 1.8,
-            margin: "auto",
-            marginTop: theme.spacing(2)
+            margin: "20px auto 10px",
         },
         name: {
             fontSize: 20,
-            fontWeight: 500
+            fontWeight: 500,
+            marginBottom: 4,
         },
-        link: {
+        title: {
             fontSize: 16,
             fontWeight: 300,
-            "& a": {
-                color: theme.palette.info.main,
-                fontSize: 14
-            }
-        }
+            color: theme.palette.info.main,
+        },
     }));
     const classes = useStyles();
 
-    const query = graphql`{
-        allTestimonialsYaml {
-          edges {
-            node {
-              name
-              review
-              title
-              avatar {
-                childImageSharp {
-                  fixed(height: 100) {
-                    ...GatsbyImageSharpFixed
-                  }
-                }
-              }
-            }
-          }
-        }
-      }`;
+    // Hardcoded testimonials
+    const testimonials = [
+        {
+            name: "John Doe",
+            title: "Frontend Developer",
+            review:
+                "This developer did an amazing job building our website. Highly recommended!",
+            avatar: "/avatars/john.jpg", // use a local image in /static or public folder
+        },
+        {
+            name: "Jane Smith",
+            title: "Project Manager",
+            review:
+                "Professional, fast, and skilled. Delivered everything on time with great quality.",
+            avatar: "/avatars/jane.jpg",
+        },
+        {
+            name: "Michael Johnson",
+            title: "CEO, TechCorp",
+            review:
+                "Outstanding work! The project exceeded our expectations and was done efficiently.",
+            avatar: "/avatars/michael.jpg",
+        },
+    ];
 
-    const testimonialQuery = useStaticQuery(query);
-    const testimonialData = testimonialQuery.allTestimonialsYaml.edges.map((item, index) => {
-        return (
-            <Typography variant="body1" component="div" color="textPrimary" align="center" className={classes.container} key={index}>
-                {item.node.avatar ? <Img
-                    fixed={item.node.avatar.childImageSharp.fixed}
-                    className={classes.image} /> : ""}
-                <p className={classes.review}>{item.node.review}</p>
-                <p className={classes.name}>{item.node.name}</p>
-                <p className={classes.link}
-                    dangerouslySetInnerHTML={{ __html: item.node.title }} />
-            </Typography>
-        );
-    });
     return (
-        <React.Fragment>
-            <Carousel animation="slide" interval={50000} className={classes.carouselContainer} navButtonsAlwaysVisible={true}>
-
-                {testimonialData}
-
-            </Carousel>
-
-        </React.Fragment>
+        <Carousel
+            animation="slide"
+            interval={5000}
+            className={classes.carouselContainer}
+            navButtonsAlwaysVisible={true}
+        >
+            {testimonials.map((item, index) => (
+                <div className={classes.container} key={index}>
+                    {item.avatar && <img src={item.avatar} alt={item.name} className={classes.image} />}
+                    <Typography className={classes.review}>{item.review}</Typography>
+                    <Typography className={classes.name}>{item.name}</Typography>
+                    <Typography className={classes.title}>{item.title}</Typography>
+                </div>
+            ))}
+        </Carousel>
     );
 };
+
 export default TestimonialSlider;
