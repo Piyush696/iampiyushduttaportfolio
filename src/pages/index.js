@@ -33,7 +33,7 @@ const IndexPage = () => {
           <Header handleClick={handleClick} themeType={themeType} />
           <section className="content-container">
             <Hero />
-            <Blog />
+            {/* <Blog /> */}
             <Work />
             <Skills />
             <ClientReview />

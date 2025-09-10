@@ -1,8 +1,7 @@
-const config = require("./src/data/config");
-
+const config = require("./src/data/config")
 require("dotenv").config({
   path: `.env.${process.env.NODE_ENV}`,
-});
+})
 
 module.exports = {
   siteMetadata: {
@@ -21,140 +20,117 @@ module.exports = {
     },
   },
   plugins: [
+    `gatsby-plugin-material-ui`,
+    `gatsby-plugin-react-helmet`,
     {
-      resolve: "gatsby-plugin-material-ui",
+      resolve: `gatsby-source-filesystem`,
       options: {
-        stylesProvider: {
-          injectFirst: true,
-        },
-      },
-    },
-    "gatsby-plugin-react-helmet",
-    {
-      resolve: "gatsby-source-filesystem",
-      options: {
-        name: "images",
+        name: `images`,
         path: `${__dirname}/src/images`,
       },
     },
-    "gatsby-transformer-sharp",
-    "gatsby-plugin-sharp",
+    `gatsby-transformer-sharp`,
+    `gatsby-plugin-sharp`,
     {
-      resolve: "gatsby-plugin-manifest",
+      resolve: `gatsby-plugin-manifest`,
       options: {
         name: config.defaultTitle,
         short_name: config.defaultTitle,
-        start_url: "/",
+        start_url: `/`,
         background_color: config.backgroundColor,
         theme_color: config.themeColor,
-        display: "minimal-ui",
-        icon: "src/images/icon.png",
-        icons: [
-          {
-            src: "/favicons/icon-192x192.png",
-            sizes: "192x192",
-            type: "image/png",
-          },
-          {
-            src: "/favicons/icon-512x512.png", // favicon path generateon build time
-            sizes: "512x512",
-            type: "image/png",
-          },
-        ],
+        display: `minimal-ui`,
+        icon: `src/images/icon.png`,          // Source image for all icons
+        include_favicon: true,                // Enable favicon generation :contentReference[oaicite:1]{index=1}
+        cache_busting_mode: `query`,
+        legacy: true,                         // Generate legacy Apple touch icons
+        icon_options: {
+          purpose: `any maskable`,
+        },
       },
     },
-    "gatsby-plugin-offline",
-    "gatsby-transformer-yaml",
+    `gatsby-plugin-offline`,
+    `gatsby-transformer-yaml`,
     {
-      resolve: "gatsby-source-filesystem",
+      resolve: `gatsby-source-filesystem`,
       options: {
-        name: "images",
+        name: `data`,
         path: `${__dirname}/src/data/`,
       },
     },
     {
-      resolve: "gatsby-plugin-canonical-urls",
+      resolve: `gatsby-plugin-canonical-urls`,
       options: {
         siteUrl: config.url,
       },
     },
     {
-      resolve: "gatsby-source-wordpress",
+      resolve: `gatsby-source-wordpress`,
       options: {
-        // Specify the URL of the WordPress source
         baseUrl: "rajeshroyal.com",
         protocol: "https",
-        // Indicates if a site is hosted on WordPress.com
         hostingWPCOM: false,
         useACF: false,
-        // Specify which URL structures to fetch
         includedRoutes: [
-          "**/categories",
-          "**/posts",
-          "**/pages",
-          "**/media",
-          "**/tags",
-          "**/taxonomies",
-          "**/users",
-        ]
-      }
+          "**/categories", "**/posts", "**/pages",
+          "**/media", "**/tags", "**/taxonomies", "**/users",
+        ],
+      },
     },
     {
-      resolve: "gatsby-plugin-feed",
+      resolve: `gatsby-plugin-feed`,
       options: {
-        query: `{
-					site {
-						siteMetadata {
-							rssMetadata {
-								site_url
-								title
-								author
-								copyright
-								description
-							}
-						}
-					}
-				}`,
+        query: `
+          {
+            site {
+              siteMetadata {
+                rssMetadata {
+                  site_url
+                  title
+                  author
+                  copyright
+                  description
+                }
+              }
+            }
+          }
+        `,
         feeds: [
           {
-            serialize: ({ query: { site, allWordpressPost } }) => {
-              return allWordpressPost.edges.map(edge => {
-                return Object.assign({}, edge.node, {
-                  description: edge.node.excerpt,
-                  url:
-                    site.siteMetadata.rssMetadata.site_url +
-                    edge.node.slug,
-                  guid:
-                    site.siteMetadata.rssMetadata.site_url +
-                    edge.node.slug,
-                  custom_elements: [{ "content:encoded": edge.node.content }],
-                  date: edge.node.date,
-                  image: site.siteMetadata.rssMetadata.site_url + edge.node.featured_media.localFile.childImageSharp.fluid.src
-                });
-              });
-            },
-            query: `{
-							allWordpressPost{
-                edges {
-                  node {
+            serialize: ({ query: { site, allWordpressPost } }) =>
+              allWordpressPost.edges.map(({ node }) => ({
+                description: node.excerpt,
+                date: node.date,
+                url: `${site.siteMetadata.rssMetadata.site_url}${node.slug}`,
+                guid: `${site.siteMetadata.rssMetadata.site_url}${node.slug}`,
+                custom_elements: [{ "content:encoded": node.content }],
+                image: `${site.siteMetadata.rssMetadata.site_url}${node.featured_media.localFile.childImageSharp.fluid.src}`,
+                title: node.title,
+              })),
+            query: `
+              {
+                allWordpressPost {
+                  edges {
+                    node {
                       title
                       excerpt
                       date
                       slug
                       content
-                      featured_media{
-                        localFile{
-                          childImageSharp{
-                            fluid{
+                      featured_media {
+                        localFile {
+                          childImageSharp {
+                            fluid {
                               src
                             }
                           }
                         }
                       }
+                    }
                   }
                 }
-            }
-						}`,
+              }
+            `,
             output: config.siteRss,
             title: config.defaultTitle,
           },
@@ -162,41 +138,21 @@ module.exports = {
       },
     },
     {
-      resolve: "gatsby-plugin-nprogress",
+      resolve: `gatsby-plugin-nprogress`,
       options: {
-        // Setting a color is optional.
-        color: "tomato",
-        // Disable the loading spinner.
+        color: `tomato`,
         showSpinner: true,
       },
     },
     {
-      resolve: "gatsby-plugin-favicon",
-      options: {
-        logo: "./src/images/icon.png",
-        injectHTML: true,
-        icons: {
-          android: true,
-          appleIcon: true,
-          appleStartup: true,
-          coast: false,
-          favicons: true,
-          firefox: true,
-          twitter: false,
-          yandex: false,
-          windows: false,
-        },
-      },
-    },
-    {
-      resolve: "gatsby-plugin-google-fonts",
+      resolve: `gatsby-plugin-google-fonts`,
       options: {
         fonts: [
-          "Roboto\:300,400,500,600",
-          "Material Icons",
+          `Roboto:300,400,500,600`,
+          `Material Icons`,
         ],
-        display: "swap"
-      }
-    }
+        display: `swap`,
+      },
+    },
   ],
-};
+}

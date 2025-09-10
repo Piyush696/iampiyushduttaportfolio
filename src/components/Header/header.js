@@ -75,7 +75,7 @@ const Header = (props) => {
                 <Toolbar className="header-toolbar">
                     <div className={classes.title}>
                         <Typography variant="h6" color="inherit" noWrap className="align-center">
-                            <Link to="/">Rajesh Royal</Link>
+                            <Link to="/">Piyush Dutta</Link>
                         </Typography>
                     </div>
                     <nav className={classes.menu}>
@@ -83,10 +83,9 @@ const Header = (props) => {
                             <Link to="/blog">Blog</Link>
                             <Link to="/about">About</Link>
                             <Link to="/contact">Contact</Link>
-                            <a href="https://rajeshroyal.com/wp-content/uploads/2020/03/Rajesh-Royal-Google-Intern-Novore.pdf" target="_blank">Resume</a>
+                            <a href="https://docs.google.com/document/d/1VudwTO5Wre_Y7VwDxz10S-M6FHI8pcAN/edit?usp=sharing&ouid=109502103879990129820&rtpof=true&sd=true" target="_blank">Resume</a>
                         </Typography>
-                        <IconButton aria-label="light/dark theme switch" color="default" onClick={() => window.open("https://github.com/Rajesh-Royal", "_blank")}>
-                            <GitHubIcon />
+                        <IconButton aria-label="light/dark theme switch" color="default" onClick={() => window.open("https://github.com/pdworkspaces", "_blank")}>
                         </IconButton>
                         <IconButton aria-label="light/dark theme switch" color="default" onClick={props.handleClick}>
                             {props.themeType === "dark" ? <BrightnessHighIcon /> : <Brightness6Icon />}

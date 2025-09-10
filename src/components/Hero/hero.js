@@ -42,21 +42,26 @@ const Hero = () => {
                     <Grid spacing={3} container>
                         <Grid component="div" item sm={12}>
                             <Typography variant="h4" color="textPrimary" align="center" className={classes.title}>
-                                Hi there, 👋 My Name is Rajesh. Frontend-Engineer from India😉.
+                                Hi there, 👋 My Name is Piyush Dutta. fullstack-Engineer from India😉.
                             </Typography>
                             <Typography variant="h6" color="textPrimary" align="center" className={classes.subTitle}>
+
+                                I'm a passionate fullstack developer who loves turning ideas into elegant, scalable, and user-friendly web experiences. With a focus on clean code and modern technologies, I'm always eager to learn and improve.
+
+                            </Typography>
+                            <Typography align="center" color="textPrimary" className={classes.subTitle}>
                                 I design and code beautifully simple things, and I love what I do.
                             </Typography>
                             <Typography align="center" className={classes.image} component="div">
                                 <Img fixed={RajeshImage.allImageSharp.edges[0].node.fixed}
-                                    alt="Rajesh royal vector illustrator" />
+                                    alt="Piyush Dutta vector illustrator" />
                             </Typography>
                             <Link to="/contact" target="_blank">
                                 <Typography variant="button" color="textPrimary" align="center" className={classes.button}>
                                     <Box mt={3}>
                                         <Button variant="contained" color="primary" size="large">
                                             Say Hello 👋
-                                    </Button>
+                                        </Button>
                                     </Box>
                                 </Typography>
                             </Link>
